@@ -12,8 +12,8 @@ public class PveHttpClientBuilder
         _disposeHandler = true;
         _timeout = null;
     }
-    
-    
+
+
     /// <summary>
     /// Configure the HttpClientHandler
     /// </summary>
@@ -22,38 +22,37 @@ public class PveHttpClientBuilder
     /// false if you intend to reuse the inner handler.</param>
     /// <param name="ignoreSslErrors">Disables certificate validation</param>
     /// <returns>Builder</returns>
-    public PveHttpClientBuilder WithHandler(HttpClientHandler? handler = null, bool disposeHandler = false, bool ignoreSslErrors = false)
+    public PveHttpClientBuilder WithHandler(HttpClientHandler? handler = null, bool disposeHandler = false,
+        bool ignoreSslErrors = false)
     {
         // If no handler was provided we'll use the default one anyway
         if (handler is not null)
             _handler = handler;
-        
+
         _disposeHandler = disposeHandler;
         if (ignoreSslErrors)
         {
-            handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true;
+            _handler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => true;
         }
-        
+
         return this;
     }
 
-    
+
     public PveHttpClientBuilder WithTimeout(TimeSpan timeout)
     {
         _timeout = timeout;
-        
+
         return this;
     }
-    
+
 
     public HttpClient Build()
     {
         var client = new HttpClient(_handler, _disposeHandler);
         if (_timeout is not null)
             client.Timeout = _timeout.Value;
-        
+
         return client;
     }
-    
-    
 }

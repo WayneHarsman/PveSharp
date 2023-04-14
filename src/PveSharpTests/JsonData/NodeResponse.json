@@ -1,0 +1,12 @@
+﻿{
+  "data": [
+    {
+      "level": "",
+      "node": "lab",
+      "status": "online",
+      "ssl_fingerprint": "F8:F4:13:79:D5:86:DA:83:51:95:9C:ED:C9:70:DA:08:71:80:F5:F1:DB:7B:F0:63:C4:80:84:5F:47:3F:C3:A1",
+      "type": "node",
+      "id": "node/lab"
+    }
+  ]
+}

@@ -2,8 +2,7 @@
 
 namespace PveSharp.Clients.Abstractions;
 
-
-public interface IQemuClient
+public interface INodeQemuClient
 {
     /// <summary>
     /// Virtual machine index
@@ -12,7 +11,7 @@ public interface IQemuClient
     /// <returns>List of vm's</returns>
     public Task<List<QemuStatus>?> Vms(string node);
 
-    
+
     /// <summary>
     /// Directory index
     /// </summary>
@@ -28,7 +27,7 @@ public interface IQemuClient
     /// <param name="vmid">Id of new vm</param>
     /// <returns>Internal proxmox task ID</returns>
     public Task<string?> CreateVm(string node, int vmid);
-    
+
     /// <summary>
     /// Destroy the VM and all used/owned volumes. Removes any VM specific permissions and firewall rules
     /// </summary>
@@ -39,10 +38,10 @@ public interface IQemuClient
     /// <param name="skipLock">Ignore locks - only root is allowed to use this option.</param>
     /// <returns>Internal proxmox task id</returns>
     public Task<string?> DestroyVm(
-        string node, 
-        int vmid, 
-        bool destroyUnrefDisks = false, 
-        bool purge = false, 
+        string node,
+        int vmid,
+        bool destroyUnrefDisks = false,
+        bool purge = false,
         bool skipLock = false);
 
     /// <summary>
@@ -52,7 +51,7 @@ public interface IQemuClient
     /// <param name="vmid">The (unique) ID of the VM.</param>
     /// <returns></returns>
     public Task<string?> StartVm(string node, int vmid);
-    
+
     /// <summary>
     /// Stop virtual machine. The qemu process will exit immediately. Thisis akin to pulling the power plug of a running computer and may damage the VM data.
     /// </summary>
@@ -69,5 +68,4 @@ public interface IQemuClient
     /// <param name="vmid">The (unique) ID of the VM.</param>
     /// <returns></returns>
     public Task<string?> ShutdownVm(string node, int vmid);
-
 }

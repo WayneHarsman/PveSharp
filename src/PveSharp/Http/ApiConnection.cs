@@ -14,7 +14,7 @@ public class ApiConnection : IApiConnection
 
     private readonly HttpClient _httpClient;
     private readonly HttpLogger? _httpLogger;
-    
+
     public event Action<IRequest> OnRequest;
     public event Action<IRequest, HttpResponseMessage> OnResponse;
 
@@ -28,7 +28,7 @@ public class ApiConnection : IApiConnection
 
         // Add authenticator to the request pipeline
         OnRequest += authenticator.Apply;
-        
+
         if (_httpLogger is not null)
         {
             OnRequest += _httpLogger.OnRequest;
@@ -43,26 +43,26 @@ public class ApiConnection : IApiConnection
             .FromMetadata(apiRequest)
             .WithDefaults()
             .Build();
-        
+
         return await SendRequestAsync<T>(request, cancellationToken);
     }
 
     public async Task<T?> SendRequestAsync<T>(IRequest request, CancellationToken cancellationToken = default)
     {
         OnRequest?.Invoke(request);
-        
+
         var response = await _httpClient.SendRequestAsync(request, cancellationToken);
         OnResponse?.Invoke(request, response);
-        
+
         // TODO: add retry logic
-        
+
         ProcessErrors(request, response);
-        
+
         // Since we handle common errors in ProcessErrors we can assume that the response is OK.
         var data = await response.Content.ReadAsStringAsync(cancellationToken);
         return DeserializeData<T>(data);
     }
-    
+
     // TODO: move to utils?
     private static T? DeserializeData<T>(string response)
     {
@@ -77,7 +77,7 @@ public class ApiConnection : IApiConnection
 
         if (response.StatusCode is HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden)
             throw new UnauthorizedException(request, response.ReasonPhrase);
-        
+
         if (response.StatusCode is HttpStatusCode.NotFound)
             throw new Exception("Requested endpoint not found.");
     }

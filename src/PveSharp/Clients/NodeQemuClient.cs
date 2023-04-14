@@ -4,9 +4,9 @@ using PveSharp.Models;
 
 namespace PveSharp;
 
-public class QemuClient : ApiClient, IQemuClient
+public class NodeQemuClient : ApiClient, INodeQemuClient
 {
-    public QemuClient(IApiConnection api) : base(api)
+    public NodeQemuClient(IApiConnection api) : base(api)
     {
     }
 
@@ -14,7 +14,7 @@ public class QemuClient : ApiClient, IQemuClient
     {
         var request = new QemuIndexRequest(node, true);
 
-        return await  API.SendRequestAsync<List<QemuStatus>>(request, CancellationToken.None);
+        return await API.SendRequestAsync<List<QemuStatus>>(request, CancellationToken.None);
     }
 
     public async Task<List<string>?> GetVmDirIndex(string node, int vmid)
@@ -31,7 +31,8 @@ public class QemuClient : ApiClient, IQemuClient
         return await API.SendRequestAsync<string?>(request, CancellationToken.None);
     }
 
-    public async Task<string?> DestroyVm(string node, int vmid, bool destroyUnrefDisks = false, bool purge = false, bool skipLock = false)
+    public async Task<string?> DestroyVm(string node, int vmid, bool destroyUnrefDisks = false, bool purge = false,
+        bool skipLock = false)
     {
         var request = new DestroyVmRequest(node, vmid, destroyUnrefDisks, purge, skipLock);
 
@@ -41,21 +42,21 @@ public class QemuClient : ApiClient, IQemuClient
     public async Task<string?> StartVm(string node, int vmid)
     {
         var request = new StartVmRequest(node, vmid);
-        
+
         return await API.SendRequestAsync<string?>(request, CancellationToken.None);
     }
-    
+
     public async Task<string?> StopVm(string node, int vmid)
     {
         var request = new StopVmRequest(node, vmid);
-        
+
         return await API.SendRequestAsync<string?>(request, CancellationToken.None);
     }
-    
+
     public async Task<string?> ShutdownVm(string node, int vmid)
     {
         var request = new ShutdownVmRequest(node, vmid);
-        
+
         return await API.SendRequestAsync<string?>(request, CancellationToken.None);
     }
 }

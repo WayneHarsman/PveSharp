@@ -3,7 +3,7 @@
 public interface IApiConnection
 {
     public Uri BaseUri { get; }
-    
+
     /// <summary>
     /// Builds request from metadata and sends it
     /// </summary>
@@ -12,6 +12,10 @@ public interface IApiConnection
     /// <typeparam name="T">Response type model</typeparam>
     /// <returns>Response model</returns>
     public Task<T?> SendRequestAsync<T>(object request, CancellationToken cancellationToken);
-    
+
     public Task<T?> SendRequestAsync<T>(IRequest request, CancellationToken cancellationToken);
+
+
+    public event Action<IRequest> OnRequest;
+    public event Action<IRequest, HttpResponseMessage> OnResponse;
 }
